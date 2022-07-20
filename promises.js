@@ -15,7 +15,7 @@ function getPosts(){
     
 }
 
-getPosts()
+// getPosts()
 
 function createPost(post){
     return new Promise((resolve,reject)=>{
@@ -23,7 +23,7 @@ function createPost(post){
             posts.push(post);
             const error = false;
             if(!error){
-                resolve();
+                resolve(posts);
             }
             else{
                 reject('Error : Something went wrong');
@@ -32,9 +32,9 @@ function createPost(post){
     })
 };
 
-createPost({title: 'Post Three', body: 'This is post Three'})
-.then(deletePost).then(getPosts)
-.catch(err=>console.log(err));
+// createPost({title: 'Post Three', body: 'This is post Three'})
+// .then(deletePost).then(getPosts)
+// .catch(err=>console.log(err));
 
 function deletePost(){
     
@@ -68,3 +68,44 @@ function deletePost(){
 // deletePost()
 // .then(getPosts)
 // .catch(err=>console.log(err));
+
+//Promise.all
+// coded as the youtuber.
+// const promise1 = Promise.resolve('hello World');
+// const promise2 = 10;
+// const promise3 = new Promise((resolve,reject)=>
+// setTimeout(resolve,2000,'Goodbye'));
+
+// Promise.all([promise1,promise2,promise3]).then(
+//     ((values)=>console.log(values))
+// );
+
+
+
+//Question 2  & 3
+const createPostPromise = createPost({title: 'Post Three', body: 'This is post Three'})
+
+const updateLastUserActivityTime = new Promise((resolve,reject)=>
+    
+        resolve(new Date())
+   )
+
+let deletPromise =  deletePost();
+
+Promise.all([createPostPromise,updateLastUserActivityTime]).then(
+    ([value1,value2])=>{
+        console.log('Post Creation , Last Activity :  '+ value2)
+        console.log(JSON.stringify(value1))
+    }
+).then(setTimeout(() => {
+    deletPromise.then((v)=>{
+        console.log('After Deletion : ')
+        console.log(posts)
+    })
+    
+}, 3000))
+
+
+
+
+
